@@ -1,0 +1,27 @@
+version: '3'
+services:
+  inference:
+    build: ./inference
+    ports:
+      - "8000:8000"  
+    networks:
+      - app-network
+    environment:
+      - MODEL_PATH=/app/resnet18
+    volumes:
+      - ./models:/app/models
+    restart: always
+
+  gui:
+    build: ./gui
+    ports:
+      - "7860:7860"  
+    networks:
+      - app-network
+    depends_on:
+      - inference  
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
